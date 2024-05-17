@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crap GX</title>
+  <title>Simple Browser</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
@@ -38,6 +38,7 @@
 
     #tabs li {
       margin: 0;
+      position: relative;
     }
 
     #tabs li button {
@@ -51,6 +52,7 @@
       border-radius: 10px 10px 0 0;
       display: flex;
       align-items: center;
+      position: relative;
     }
 
     #tabs li button.active {
@@ -59,6 +61,26 @@
 
     #tabs li button:hover {
       background-color: #555;
+    }
+
+    #tabs li .delete-tab {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 8px;
+      margin: 0;
+      transition: background-color 0.3s ease, opacity 0.3s ease; /* Added opacity transition */
+      font-size: 14px;
+      opacity: 0; /* Hidden by default */
+    }
+
+    #tabs li:hover .delete-tab {
+      opacity: 1; /* Show on hover */
     }
 
     #add-tab {
@@ -88,7 +110,7 @@
     }
 
     #url-bar {
-      flex: 1; /* Make URL bar expand to fill remaining space */
+      flex: 1;
       border: none;
       padding: 10px;
       font-size: 16px;
@@ -119,7 +141,7 @@
     <ul id="tabs"></ul>
     <div id="header">
       <input type="text" id="url-bar" placeholder="Enter URL">
-      <button id="add-tab">Add Tab</button>
+      <button id="add-tab">+ Add Tab</button>
     </div>
     <iframe id="browser-frame" src=""></iframe>
   </div>
@@ -144,6 +166,17 @@
           button.classList.add('active');
         }
         li.appendChild(button);
+
+        // Add delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'x';
+        deleteButton.className = 'delete-tab';
+        deleteButton.addEventListener('click', (event) => {
+          event.stopPropagation(); // Prevent tab click event from triggering
+          deleteTab(index);
+        });
+        li.appendChild(deleteButton);
+
         tabsElement.appendChild(li);
       });
     }
