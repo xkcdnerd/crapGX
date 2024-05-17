@@ -16,7 +16,8 @@ crapGX is like your normal browser. Tabs and URL bars and all of that. But, its 
    all this is in one file so no external js or css.
 6. no more cookies<br>
    dont eat them.  they are bad for ur teeth(and for my sanity)<br>
-
+7. useless lag<br>
+   added a completely useless serverside script for it to be laggy
 NOTE: after stealing like 50% of my code from Chat GPT, now i have browsing history here(I think)
 
 
