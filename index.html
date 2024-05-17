@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple Browser</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
     body {
       font-family: 'Inter', sans-serif;
@@ -150,6 +150,27 @@
   <script>
     let tabs = [];
     let currentTab = 0;
+    let ipAddress = ''; // Variable to store the IP address
+
+    // Function to get the IP address
+    function getIPAddress() {
+      // This is a basic example to get IP address. For production, you might need a more reliable method.
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          ipAddress = data.ip; // Store the IP address
+          initializeTabs(); // Initialize tabs with the stored browsing history
+        })
+        .catch(error => console.error('Error getting IP address:', error));
+    }
+
+    function initializeTabs() {
+      const storedTabs = localStorage.getItem(ipAddress); // Get browsing history for the current IP address
+      if (storedTabs) {
+        tabs = JSON.parse(storedTabs);
+        renderTabs();
+      }
+    }
 
     function renderTabs() {
       const tabsElement = document.getElementById('tabs');
@@ -189,6 +210,7 @@
           const match = text.match(/<title>(.*?)<\/title>/);
           const title = match ? match[1] : 'Untitled';
           tabs.push({ url, title });
+          localStorage.setItem(ipAddress, JSON.stringify(tabs)); // Store tabs in local storage with IP address as key
           renderTabs();
           currentTab = tabs.length - 1;
           document.getElementById('browser-frame').src = url;
@@ -198,6 +220,7 @@
 
     function deleteTab(index) {
       tabs.splice(index, 1);
+      localStorage.setItem(ipAddress, JSON.stringify(tabs)); // Update local storage after deleting tab
       if (currentTab >= index && currentTab > 0) {
         currentTab--;
       }
@@ -216,7 +239,8 @@
       }
     });
 
-    renderTabs();
+    // Get the IP address and initialize tabs
+    getIPAddress();
   </script>
 </body>
 </html>
